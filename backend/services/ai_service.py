@@ -1,4 +1,5 @@
 import os
+import re
 import json
 import anthropic
 from dotenv import load_dotenv
@@ -7,6 +8,16 @@ load_dotenv()
 
 client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 MODEL = "claude-sonnet-4-6"
+
+
+def _parse_json(text: str) -> dict:
+    """Robustly extract JSON from Claude's response, handling markdown code blocks."""
+    text = text.strip()
+    # Extract content from markdown code block if present
+    match = re.search(r'```(?:json)?\s*([\s\S]*?)```', text)
+    if match:
+        text = match.group(1).strip()
+    return json.loads(text)
 
 
 def check_eligibility(questions: list, email_body: str) -> dict:
@@ -55,13 +66,7 @@ Respond with ONLY valid JSON in this exact format:
         messages=[{"role": "user", "content": prompt}]
     )
 
-    content = message.content[0].text.strip()
-    # Strip markdown code blocks if present
-    if content.startswith("```"):
-        content = content.split("```")[1]
-        if content.startswith("json"):
-            content = content[4:]
-    return json.loads(content.strip())
+    return _parse_json(message.content[0].text)
 
 
 def score_resume(resume_text: str, job: dict) -> int:
@@ -97,10 +102,5 @@ Respond with ONLY valid JSON in this exact format:
         messages=[{"role": "user", "content": prompt}]
     )
 
-    content = message.content[0].text.strip()
-    if content.startswith("```"):
-        content = content.split("```")[1]
-        if content.startswith("json"):
-            content = content[4:]
-    result = json.loads(content.strip())
+    result = _parse_json(message.content[0].text)
     return int(result["score"])

@@ -29,5 +29,4 @@ export const api = {
   getCandidate: (id) => request('GET', `/candidate/${id}`),
   approveCandidate: (id) => request('POST', `/candidate/${id}/approve`),
   rejectCandidate: (id) => request('POST', `/candidate/${id}/reject`),
-  submitResponse: (id, answers) => request('POST', `/candidate/${id}/response`, { answers }),
 }

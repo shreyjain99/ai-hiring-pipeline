@@ -82,7 +82,7 @@ export default function Dashboard() {
                       onClick={() => navigate(`/admin/candidate/${c.id}`)}
                     >
                       <div>
-                        <p className="text-sm font-medium text-gray-900">{c.name}</p>
+                        <p className="text-sm font-medium text-gray-900">{c.first_name} {c.last_name}</p>
                         <p className="text-xs text-gray-500">{c.email}</p>
                       </div>
                       <span className="text-xs text-gray-500 capitalize">{c.stage.replace(/_/g, ' ')}</span>

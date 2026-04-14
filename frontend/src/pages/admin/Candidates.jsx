@@ -23,7 +23,8 @@ export default function Candidates() {
   }, [])
 
   const filtered = candidates.filter(c => {
-    const matchesSearch = c.name.toLowerCase().includes(search.toLowerCase()) || c.email.toLowerCase().includes(search.toLowerCase())
+    const fullName = `${c.first_name} ${c.last_name}`.toLowerCase()
+    const matchesSearch = fullName.includes(search.toLowerCase()) || c.email.toLowerCase().includes(search.toLowerCase())
     const matchesStage = stageFilter === 'all' || c.stage === stageFilter
     return matchesSearch && matchesStage
   })
@@ -84,7 +85,7 @@ export default function Candidates() {
                     onClick={() => navigate(`/admin/candidate/${c.id}`)}
                     className="hover:bg-gray-50 cursor-pointer"
                   >
-                    <td className="px-6 py-3 text-sm font-medium text-gray-900">{c.name}</td>
+                    <td className="px-6 py-3 text-sm font-medium text-gray-900">{c.first_name} {c.last_name}</td>
                     <td className="px-6 py-3 text-sm text-gray-500">{c.email}</td>
                     <td className="px-6 py-3">
                       <Badge stage={c.stage} label={c.stage.replace(/_/g, ' ')} />

@@ -67,7 +67,7 @@ export default function CandidateDetail() {
             {/* Header */}
             <div className="flex items-start justify-between">
               <div>
-                <h2 className="text-xl font-semibold text-gray-900">{candidate.name}</h2>
+                <h2 className="text-xl font-semibold text-gray-900">{candidate.first_name} {candidate.last_name}</h2>
                 <p className="text-sm text-gray-500 mt-0.5">{candidate.email}</p>
               </div>
               <Badge stage={candidate.stage} label={candidate.stage.replace(/_/g, ' ')} />
